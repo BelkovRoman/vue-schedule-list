@@ -12,4 +12,7 @@ export default {
   },
   rev: null,
   modalVisibility: false,
+  isSaving: false,
+  isSaved: false,
+  saveErr: null,
 };

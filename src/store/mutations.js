@@ -14,19 +14,23 @@ export default {
     state.isFetched = true
     state.error = value
   },
-  setData(state, data) {
-    const newArray = data.records.map(item => ({
+  setRecords(state, payload) {
+    const newArray = payload.data.map(item => ({
       ...item,
       isSelected: false
     }))
     state.records = newArray
     state.initialRecords = newArray
-    state.intervals = data.intervals
-    state.disciplines = data.disciplines
-    state.rev = data.rev
+    state.rev = payload._rev
 
     state.isFetching = false
     state.isFetched = true
+  },
+  setDisciplines(state, payload) {
+    state.disciplines = payload
+  },
+  setIntervals(state, payload) {
+    state.intervals = payload
   },
   selectItem(state, id) {
     state.records = state.records.map((item, index) => {
@@ -60,7 +64,7 @@ export default {
       ['asc']
     )
   },
-  setIntervals(state, value) {
+  setInterval(state, value) {
     state.records = state.records.map(item => ({
       ...item,
       timeStart: item.timeStart !== value && item.isSelected ?
@@ -84,5 +88,8 @@ export default {
   },
   changeModalVisibility(state) {
     state.modalVisibility = !state.modalVisibility
-  }
+  },
+  changeSavingState(state) {
+    state.isSaving = !state.isSaving
+  },
 };

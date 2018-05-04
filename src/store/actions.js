@@ -2,39 +2,25 @@ import api from '../api'
 import data from "../mock/data";
 import parseResponse from "../helpers/parseResponse";
 
-export default {
-  fetchData({ commit }) {
-  //   let promise = new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       resolve(parseResponse(data));
-  //     }, 1000);
-  //
-  //   });
-  //
-  //   commit('setFetching')
-  //     promise
-  //     .then(result => {
-  //       commit("setData", result)
-  //       commit("setFetched")
-  //     })
-  //     .catch(error => commit("setFetchFailure", error))
+const handleFetchRecords = commit => {
+  commit('setFetching')
+  api.getRecords()
+    .then(records => commit("setRecords", records.data))
+    .catch(error => commit("setFetchFailure", error))
+}
 
-    commit('setFetching')
-    api.getRecords()
-      .then(records => {
-        api.getDisciplines()
-          .then(disciplines => {
-            api.getIntervals()
-              .then(intervals => {
-                commit("setData", {
-                  records: records.data.data,
-                  disciplines: disciplines.data.data,
-                  intervals: intervals.data.data,
-                  rev: records.data._rev
-                })
-              })
-          })
-      })
+export default {
+  fetchRecords({ commit }) {
+    handleFetchRecords(commit)
+  },
+  fetchDisciplines({ commit }) {
+    api.getDisciplines()
+      .then(disciplines => commit("setDisciplines", disciplines.data.data))
+      .catch(error => commit("setFetchFailure", error))
+  },
+  fetchIntervals({ commit }) {
+    api.getIntervals()
+      .then(intervals => commit("setIntervals", intervals.data.data))
       .catch(error => commit("setFetchFailure", error))
   },
   selectItem({ commit }, id) {
@@ -72,9 +58,15 @@ export default {
       ({name: item.name, timeStart: item.timeStart})
     )
 
-    commit('setFetching')
     api.saveData(arrayToSave, payload.rev)
-      .then(res => commit('setFetched'))
-      .catch(err => commit('setFetched', `Произошла ошибка: ${err}`))
+      .then(res => {
+        commit('changeSavingState')
+        setTimeout(() => {
+          commit('changeSavingState')
+        }, 3000)
+
+        handleFetchRecords(commit)
+      })
+      .catch(err => commit('setSavedErr', `Произошла ошибка: ${err}`))
   },
 };

@@ -51,7 +51,6 @@
 <script>
 import CustomCheckbox from "./shared/Checkbox.vue";
 import { directive as onClickaway } from 'vue-clickaway';
-
 export default {
   directives: {
     onClickaway: onClickaway,
@@ -97,12 +96,10 @@ export default {
     &__title {
       margin-top: 0;
     }
-
     &__table {
       text-align: left;
     }
   }
-
   .discipline {
     display: flex;
     align-items: center;
@@ -111,11 +108,9 @@ export default {
     margin-bottom: 5px;
     background-color: #c3c3c3;
     border: 3px solid transparent;
-
     &_highlighted {
       border-color: red;
     }
-
     & td {
       margin-right: 5px;
     }

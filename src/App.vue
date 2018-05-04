@@ -35,7 +35,9 @@ export default {
     }
   },
   beforeMount: function() {
-    this.$store.dispatch("fetchData");
+    this.$store.dispatch("fetchRecords");
+    this.$store.dispatch("fetchDisciplines");
+    this.$store.dispatch("fetchIntervals");
   }
 };
 </script>

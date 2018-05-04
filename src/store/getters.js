@@ -82,5 +82,8 @@ export default {
   },
   getRev(state) {
     return state.rev
-  }
+  },
+  isSaving(state) {
+    return state.isSaving
+  },
 };

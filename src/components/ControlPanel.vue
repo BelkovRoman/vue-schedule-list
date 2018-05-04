@@ -15,10 +15,18 @@
     </div>
     <div class="controlPanel__item">
       <customButton
-        :isDisabled="!isDataEdited"
+        :isDisabled="!isDataEdited || isDataSaving"
         @handleClick="() => saveChanges()"
       >
-        Сохранить изменения
+        <span
+          class="controlPanel__saved"
+          v-if="isDataSaving"
+        >
+          Изменения сохранены
+        </span>
+        <span v-else>
+          Сохранить изменения
+        </span>
       </customButton>
     </div>
   </div>
@@ -26,10 +34,12 @@
 
 <script>
 import CustomButton from "./shared/Button.vue";
+import Preloader from './shared/Preloader.vue'
 
 export default {
   components: {
     customButton: CustomButton,
+    preloader: Preloader,
   },
   computed: {
     isSomeItemSelected() {
@@ -44,6 +54,9 @@ export default {
     records() {
       return this.$store.getters.getRecords;
     },
+    isDataSaving() {
+      return this.$store.getters.isSaving;
+    },
   },
   methods: {
     changeModalVisibility() {
@@ -53,12 +66,12 @@ export default {
       this.$store.dispatch('removeDiscipline')
     },
     saveChanges() {
-      if (this.isDataEdited) {
+      if (this.isDataEdited || this.isDataSaving) {
         const rev = this.$store.getters.getRev;
 
         this.$store.dispatch('saveChanges', {
           records: this.records,
-          rev: rev
+          rev: rev,
         })
       }
     }
@@ -71,6 +84,10 @@ export default {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 20px;
+
+    &__saved {
+      color: #fff;
+    }
 
     &__item {
       margin-right: 10px;
