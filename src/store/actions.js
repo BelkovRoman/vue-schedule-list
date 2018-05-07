@@ -29,8 +29,8 @@ export default {
   selectAllItems({ commit }, value) {
     commit('selectAllItems', value)
   },
-  setIntervals({ commit }, value) {
-    commit('setIntervals', value)
+  setInterval({ commit }, value) {
+    commit('setInterval', value)
   },
   addDiscipline({ commit }, value) {
     commit('addDiscipline', value)
