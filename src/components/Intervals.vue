@@ -9,12 +9,12 @@
     >
       <div
         class="intervals__item"
-        @click="() => selectInterval(item.value)"
         v-for="(item, index) in intervals"
+        @click="() => selectInterval(item.value, item.isDisabled)"
         :key="`interval_${index}`"
-        :class="{intervals__item_disabled: item.isDisabled || !isSomeItemSelected,
+        :class="{intervals__item_disabled: item.isDisabled,
           intervals__item_enabled: !item.isDisabled,
-          intervals__item_highlighted: item.value === selectedDiscipline.timeStart}"
+          intervals__item_highlighted: isItemHighlighted(item)}"
         >
         {{ item.value }}
       </div>
@@ -43,16 +43,23 @@ export default {
     },
   },
   methods: {
-    selectInterval(value) {
-      this.$store.dispatch('selectTime', value)
+    selectInterval(value, isDisabled) {
       if (this.isSomeItemSelected) {
         this.$store.dispatch('setInterval', value)
+        this.$store.dispatch('selectDiscipline', null)
+        this.$store.dispatch('selectTime', null)
+      } else if (isDisabled) {
+        this.$store.dispatch('selectTime', value)
       }
     },
     deselectTime() {
       if (this.selectedTime) {
         this.$store.dispatch('deselectTime')
       }
+    },
+    isItemHighlighted(item) {
+      return item.value === this.selectedDiscipline &&
+        this.isSomeItemSelected
     }
   },
 };
@@ -84,7 +91,6 @@ export default {
       }
       &_disabled {
         background-color: #989898;
-        cursor: not-allowed;
       }
       &_highlighted {
         border-color: red;

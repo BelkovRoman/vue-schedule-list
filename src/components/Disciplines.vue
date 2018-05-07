@@ -21,19 +21,18 @@
           </td>
         </tr>
       </thead>
-      <tbody v-on-clickaway="deselectDiscipline">
+      <tbody>
         <tr
           class="discipline"
           v-for="(item, index) in records"
           :key="`discipline_${index}`"
           :class="{discipline_highlighted: item.timeStart === selectedTime}"
-          @click="() => selectDiscipline(item)"
         >
           <td>
             <customCheckbox
               :isSelected="item.isSelected"
               :id="`item_${index}`"
-              @handleClick="() => selectItem(index)"
+              @handleClick="() => selectItem(item, index)"
             />
           </td>
           <td>
@@ -50,11 +49,7 @@
 
 <script>
 import CustomCheckbox from "./shared/Checkbox.vue";
-import { directive as onClickaway } from 'vue-clickaway';
 export default {
-  directives: {
-    onClickaway: onClickaway,
-  },
   components: {
     customCheckbox: CustomCheckbox
   },
@@ -73,16 +68,9 @@ export default {
     }
   },
   methods: {
-    selectItem(value) {
-      this.$store.dispatch('selectItem', value)
-    },
-    selectDiscipline(value) {
-      this.$store.dispatch('selectDiscipline', value)
-    },
-    deselectDiscipline() {
-      if (this.selectedDiscipline.timeStart) {
-        this.$store.dispatch('deselectDiscipline')
-      }
+    selectItem(item, index) {
+      this.$store.dispatch('selectItem', index)
+      this.$store.dispatch('selectDiscipline', item.timeStart)
     },
     selectAllItems() {
       this.$store.dispatch('selectAllItems', this.isAllSelected)

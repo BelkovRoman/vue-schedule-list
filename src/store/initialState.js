@@ -7,9 +7,7 @@ export default {
   isFetched: false,
   error: null,
   selectedTime: null,
-  selectedDiscipline: {
-    timeStart: null
-  },
+  selectedDiscipline: null,
   rev: null,
   modalVisibility: false,
   isSaving: false,

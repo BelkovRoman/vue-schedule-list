@@ -2,14 +2,7 @@ import { orderBy, isEqual } from 'lodash'
 
 export default {
   getRecords(state) {
-    const sortedArray = orderBy(state.records, ['timeStart'], ['asc']);
-    const selectedTime = state.selectedTime
-
-    return sortedArray.map((item, index) => ({
-      ...item,
-      id: index,
-      isHighlighted: item.timeStart === selectedTime
-    }));
+    return state.records
   },
   isSomeItemSelected(state) {
     return state.records.some(item => item.isSelected)

@@ -15,10 +15,16 @@ export default {
     state.error = value
   },
   setRecords(state, payload) {
-    const newArray = payload.data.map(item => ({
+    const sortedArray = orderBy(payload.data, ['timeStart'], ['asc']);
+    const selectedTime = state.selectedTime
+
+    const newArray = sortedArray.map((item, index) => ({
       ...item,
-      isSelected: false
-    }))
+      id: index,
+      isHighlighted: item.timeStart === selectedTime,
+      isSelected: false,
+    }));
+
     state.records = newArray
     state.initialRecords = newArray
     state.rev = payload._rev
@@ -55,22 +61,31 @@ export default {
       (state.records.concat(value),
       ['timeStart'],
       ['asc']
-    )
+    ).map((item, index) => ({
+      ...item,
+      id: index,
+    }))
   },
   removeDiscipline(state) {
     state.records = orderBy(
       state.records.filter(item => !item.isSelected),
       ['timeStart'],
       ['asc']
-    )
+    ).map((item, index) => ({
+      ...item,
+      id: index,
+    }))
   },
   setInterval(state, value) {
-    state.records = state.records.map(item => ({
+    state.records = orderBy
+      (state.records.map(item => ({
       ...item,
       timeStart: item.timeStart !== value && item.isSelected ?
         value :
         item.timeStart
-    }))
+      })),
+      ['timeStart'],
+      ['asc'])
   },
   selectTime(state, value) {
     state.selectedTime = value

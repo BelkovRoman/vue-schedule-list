@@ -15,6 +15,7 @@
               v-model="nameValue"
               :options="nameOptions"
               :placeholder="'Выберите наименование'"
+              :maxHeight="'200px'"
             />
           </div>
           <div class="addDiscipline__item">
@@ -23,6 +24,7 @@
               label="value"
               :options="timeOptions"
               :placeholder="'Выберите время начала'"
+              :maxHeight="'200px'"
             />
           </div>
         </div>
@@ -85,7 +87,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
 
     &__fade {
       position: absolute;
